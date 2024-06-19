@@ -1,0 +1,31 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Cliente {
+  id        Int      @id @default(autoincrement())
+  nome      String
+  email     String   @unique
+  telefone  String
+  endereco  String
+  cidade    String
+  estado    String
+  agendamentos Agendamento[]
+
+@@map("cliente")
+}
+
+model Agendamento {
+  id           Int      @id @default(autoincrement())
+  data         DateTime @default(now())
+  observacoes  String
+  cliente      Cliente  @relation(fields: [clienteId], references: [id])
+  clienteId    Int
+  
+  @@map("agendamento")
+}
